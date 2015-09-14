@@ -5,8 +5,6 @@
  
 var card_value_arr = [ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 ];
 var suit_value_arr = [ "S", "D", "H", "C" ];
-var player_one_wins = 0;
-var player_two_wins = 0;
 
 function Card(value, suit) {
 	this.value = value;
