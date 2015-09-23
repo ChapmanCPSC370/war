@@ -2,9 +2,16 @@
  * A javascript project that runs a game of war simulation between two players
  *   and prints out statistics to the console.
  */
- 
 var card_value_arr = [ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 ];
 var suit_value_arr = [ "S", "D", "H", "C" ];
+var submit = document.getElementById("submit");
+
+ function game(){
+	var game = new Simulation();
+	game.play();
+	game.print_statistics();
+
+}
 
 function Card(value, suit) {
 	this.value = value;
@@ -15,7 +22,7 @@ function Card(value, suit) {
 }
 
 function Simulation() {
-	this.num_simulations = 256;
+	this.num_simulations = 1;
 	this.num_wars = 0;
 	this.p_one_wins = 0;
 	this.p_two_wins = 0;
@@ -26,7 +33,9 @@ function Simulation() {
 		var deck = [];
 		for( var i = 0; i < card_value_arr.length; ++i ){
 			for( var j = 0; j < 4; ++j ){
-				deck.push(new Card(card_value_arr[i], suit_value_arr[j]));
+				var card = new Card(card_value_arr[i], suit_value_arr[j]);
+				deck.push(card);
+
 			}
 		}
 		return deck;
@@ -49,32 +58,50 @@ function Simulation() {
 	
 	/* decides who won the war */
 	this.play_war = function( p_one_card, p_two_card ) {
-		if( p_one_card.value > p_two_card.value )
+		if( p_one_card.value > p_two_card.value ){
 			return 1;
-		else if( p_one_card.value < p_two_card.value )
+		}
+		else if( p_one_card.value < p_two_card.value ){
 			return 2;
-		else
-			return 0;
+		}
+		else{
+			return 0;	
+		}
+
 	}
 	
 	/* starts the simulation */
 	this.play = function() {
 		var num_games = this.num_simulations;
+		count = 0;
 		while( num_games != 0 ){
 			var deck = this.shuffle_cards();
 			var p_one_deck = deck.slice(0, deck.length/2);
 			var p_two_deck = deck.slice(deck.length/2, deck.length);
 			var pile = [];
-			while( true ) {
-				pile.push( p_one_deck.pop() );
-				pile.push( p_two_deck.pop() );
-				switch( this.play_war(pile[ pile.length - 2 ], pile[ pile.length - 1]) ) {
+			//Games take can go on too long, so keep the games under 10,000 turns
+			while( count < 10000 ){
+				count++;
+				if(count == 9999){
+					this.num_ties++;
+					break;
+				}
+				var card1 = p_one_deck.pop();
+				var card2 =  p_two_deck.pop();
+				pile.push(card1);
+				pile.push(card2);
+
+				switch( this.play_war(card1, card2)) {
 					case 1:
-						p_one_deck.splice(0, 0, pile);
+						for(var i=0; i < pile.length; i++){
+							p_one_deck.unshift(pile[i]);
+						}
 						pile = [];
 						break;
 					case 2:
-						p_two_deck.splice(0, 0, pile);
+						for(var i=0; i < pile.length; i++){
+								p_two_deck.unshift(pile[i]);
+							}
 						pile = [];
 						break;
 					case 0:
@@ -84,9 +111,11 @@ function Simulation() {
 						 * cards for a war, then you automatically win, or if you both have less than 2 cards for a war, you tie
 						 */
 						if(p_one_deck.length > 1 && p_two_deck.length != 0)
-							pile.push( p_one_deck.pop() );
+							var card1 = p_one_deck.pop();
+							pile.push( card1 );
 						if(p_two_deck.length > 1 && p_one_deck.length != 0)
-							pile.push( p_two_deck.pop() );
+							var card2 =  p_two_deck.pop();
+							pile.push(card2 );
 						this.num_wars++;
 						break;
 				}
@@ -107,6 +136,19 @@ function Simulation() {
 	}
 	
 	this.print_statistics = function() {
+		var wins = document.getElementById("p1-wins").innerHTML;
+		var wins2 = document.getElementById("p2-wins").innerHTML; 
+		var ties = document.getElementById("ties").innerHTML;
+
+		wins = parseInt(wins) + this.p_one_wins;
+		wins2 = parseInt(wins2) + this.p_two_wins;
+		ties = parseInt(ties) + this.num_ties;
+
+		document.getElementById("p1-wins").innerHTML = wins;
+		document.getElementById("p2-wins").innerHTML = wins2;
+		document.getElementById("ties").innerHTML = ties;
+		document.getElementById("wars").innerHTML = this.num_wars;
+		  
 		console.log( "player one win percentage: " + ((this.p_one_wins/this.num_simulations) * 100) + "%\n"
 			+ "player two win percentage: " + ((this.p_two_wins/this.num_simulations) * 100) + "%\n"
 			+ "perentage of ties: " + ((this.num_ties/this.num_simulations) * 100) + "%\n"
@@ -114,6 +156,4 @@ function Simulation() {
 	}
 }
  	 
-var game = new Simulation();
-game.play();
-game.print_statistics();
+

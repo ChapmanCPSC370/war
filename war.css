@@ -1,0 +1,33 @@
+#submit{
+	position: absolute;
+	left: 50%;
+	top: 20%;
+}
+h3{
+	position: absolute;
+	left: 48%;
+	top: 5%;
+	display: inline-block;
+}
+.players{
+	top: 40%;
+	left: 30%;
+	width: 600px;
+	position: absolute;
+}
+.left{	
+	display: inline-block;
+	float: left
+	
+}
+.right{
+	display: inline-block;
+	float: right;
+}
+.center{
+	position: absolute;
+	top: 130%;
+	left: 45%;
+}
+
+	

@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<head>
+	<script src="war.js"></script>
+	<link rel="stylesheet" type="text/css" href="war.css">
+	<h3> War Simulator </h3>
+</head>
+
+<body>
+	<button type="submit" id="submit" onClick="game()"> Simulate! </button>
+
+	<div class="players">
+		<div class="left">
+			<h2>Player 1</h2>
+
+			<h2>Number of Wins: </h2>
+			<div id="p1-wins" style="font-size: 20px;">0</div>
+		</div>
+		<div class="right">
+			<h2>Player 2</h2>
+
+			<h2>Number of Wins: </h2>
+			<div id="p2-wins" style="font-size: 20px;">0</div>
+		</div>
+		<div class="center">
+
+			<h2 style="display: inline-block;">Ties:</h2><div id="ties" style="display: inline-block; padding-left: 10px; font-size: 20px;">0</div>
+			<h2 style="margin-left: -100px;">Number of Wars This Game: </h2><div id="wars" style="font-size: 20px; display: inline-block;">0</div>
+		</div>
+	</div>
+	
+</body>
+</html>
